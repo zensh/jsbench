@@ -1,0 +1,22 @@
+{
+  "name": "jsbench",
+  "main": "index.js",
+  "version": "0.0.1",
+  "homepage": "https://github.com/zensh/jsbench",
+  "authors": [
+    "Yan Qing <admin@zensh.com>"
+  ],
+  "description": "A every small javascript benchmarks, base on thenjs!",
+  "keywords": [
+    "benchmark"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "docs",
+    "test",
+    "tests"
+  ]
+}

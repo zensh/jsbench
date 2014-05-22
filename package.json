@@ -1,0 +1,30 @@
+{
+  "name": "jsbench",
+  "description": "A every small javascript benchmarks, base on thenjs!",
+  "author": {
+    "name": "zensh"
+  },
+  "version": "0.0.1",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:zensh/jsbench.git"
+  },
+  "homepage": "https://github.com/zensh/jsbench",
+  "keywords": [
+    "benchmark"
+  ],
+  "tags": [
+    "benchmark"
+  ],
+  "dependencies": {
+    "thenjs": ">=0.12.x"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-contrib-jshint": "~0.7.2"
+  },
+  "scripts": {
+    "test": "grunt test"
+  }
+}
