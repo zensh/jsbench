@@ -1,6 +1,6 @@
 // v0.0.1
 //
-// 小巧、简单、强大的链式异步编程工具！
+// A every small javascript benchmarks, base on thenjs!
 //
 // **Github:** https://github.com/teambition/then.js
 //
@@ -12,14 +12,14 @@
   var thenjs;
 
   function printError(name, error) {
-    console.error('\n' + name + ' error: ', error);
+    console.error(name + ' error: ', error);
   }
 
   function printResult(task) {
     var loops = task.loops,
       ms = (task.endTime - task.startTime) / loops,
       ops = 1000 / ms;
-    console.log('\n' + task.name + ' : ' + loops + ' loops, ' + ms + ' ms/loop, ' + ops.toFixed(2) + ' ops/sec.');
+    console.log(task.name + ' : ' + loops + ' loops, ' + ms + ' ms/loop, ' + ops.toFixed(2) + ' ops/sec.');
   }
 
   function Benchmark() {
@@ -43,7 +43,7 @@
     }
 
     thenjs.eachSeries(self._tasklist, function (cont, task) {
-      console.log('\n' + task.name + ' begin: ');
+      console.log(task.name + ' begin: ');
       task.startTime = Date.now();
       task.loops = task.error = task.endTime = null;
 
@@ -63,6 +63,7 @@
       } else {
         thenjs.eachSeries(_loops, function (cont2, i) {
           task.loops = i;
+          console.log('loops: ' + i);
           thenjs.defer(cont2, task.task, cont2);
         }).all(function (cont2, error) {
           if (error) {
@@ -71,7 +72,7 @@
           } else {
             task.endTime = Date.now();
           }
-          cont2();
+          cont();
         });
       }
     }).all(function (cont, error, result) {
