@@ -3,7 +3,7 @@
 
 var async = require('async'),
   thenjs = require('thenjs'),
-  Benchmark = require('../index');
+  JSBench = require('../index');
 
 var list = [], tasks = [];
 
@@ -22,7 +22,7 @@ for (var i = 0; i < 1000; i++) {
   tasks[i] = task;
 }
 
-var bench = new Benchmark();
+var bench = new JSBench();
 
 bench.add('async', function (callback) {
   // async 测试主体

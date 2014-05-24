@@ -4,7 +4,7 @@
   "author": {
     "name": "zensh"
   },
-  "version": "0.1.0",
+  "version": "0.2.0",
   "main": "index.js",
   "repository": {
     "type": "git",
@@ -12,10 +12,13 @@
   },
   "homepage": "https://github.com/zensh/jsbench",
   "keywords": [
-    "benchmark"
+    "benchmark",
+    "thenjs"
   ],
   "tags": [
-    "benchmark"
+    "benchmark",
+    "jsbench",
+    "thenjs"
   ],
   "dependencies": {
     "thenjs": ">=0.12.4"

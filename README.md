@@ -1,4 +1,4 @@
-jsbench 0.1.0
+JSBench 0.2.0
 =======
 
 A every small javascript benchmarks, base on thenjs
@@ -9,32 +9,19 @@ A every small javascript benchmarks, base on thenjs
 
     npm install jsbench
 
-**bower:**
-
-    bower install jsbench
-
 **Browser:**
+
     <script src="/pathTo/then.js"></script>
     <script src="/pathTo/jsbench/index.js"></script>
 
-**with require**
-
-    var then = require('jsbench');
-
-**with define**
-
-    define(['jsbench'], function (jsbench) {
-        //...
-    });
-
 ## API
 
-###jsbench.add(taskName, taskFn)
+###JSBench.add(taskName, taskFn)
 
 + **taskName**：String，测试名称
 + **taskFn**：Function，function (callback) { //测试主体，异步模式必须使用 callback 结束测试 }
 
-###jsbench.run([loops, syncMode])
+###JSBench.run([loops, syncMode])
 
 + **loops**：Number，可选，每个测试循环次数，默认为 10
 + **syncMode**：Boolean，可选，是否开启同步模式，默认异步模式，taskFn会注入 callback，同步模式则不会
@@ -42,9 +29,9 @@ A every small javascript benchmarks, base on thenjs
 ## Demo
 
 
-    var Benchmark = require('jsbench');
+    var JSBench = require('jsbench');
 
-    var jsbench = new Benchmark();
+    var jsbench = new JSBench();
 
     jsbench.add('task1', function (callback) {
         // task1 测试主体，异步模式必须使用 callback 结束测试
