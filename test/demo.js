@@ -55,4 +55,10 @@ bench.add('async', function (callback) {
   }).fail(function (cont, error) {
     callback(error);
   });
+// }).on('cycle', function (e) {
+//   console.log(e);
+// }).on('complete', function (e) {
+//   console.log(e);
+// }).on('error', function (e) {
+//   console.log(e);
 }).run();
