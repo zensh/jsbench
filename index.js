@@ -1,4 +1,4 @@
-// JSBench v0.3.0
+// JSBench v0.3.1
 // A every small javascript benchmarks, base on thenjs!
 // **Github:** https://github.com/zensh/jsbench
 // **License:** MIT
@@ -62,7 +62,7 @@
     }
 
     // 按顺序串行执行各个测试
-    console.log('\nJSBench Start:');
+    console.log('\nJSBench Start (' + cycles + ' cycles, ' + (syncMode ? 'sync' : 'async') + ' mode):');
     thenjs.eachSeries(list, function (cont, test, index) {
       // 异步执行每一个测试
       thenjs.defer(cont, function () {

@@ -49,10 +49,10 @@ function test2(list) {
 }
 
 
-var Benchmark = require('../index');
-var bench = new Benchmark();
+var JSBench = require('../index');
+var jsbench = new JSBench();
 
-bench.add('test1', function () {
+jsbench.add('test1', function () {
   test1([27, 52, 95, 6, 59, 60, 83, 41, 26, 12]);
   test1([12, 43, 87, 73, 39, 49, 51, 17, 65, 44]);
   test1([30, 3, 20, 21, 40, 38, 60, 2, 40]);

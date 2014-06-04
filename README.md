@@ -1,4 +1,4 @@
-JSBench 0.3.0
+JSBench 0.3.1
 =======
 
 A every small javascript benchmarks, base on thenjs
@@ -13,6 +13,34 @@ A every small javascript benchmarks, base on thenjs
 
     <script src="/pathTo/then.js"></script>
     <script src="/pathTo/jsbench/index.js"></script>
+
+## DEMO
+
+**`node --harmony benchmark/index.js`:**
+
+    [root@centos jsbench]# node benchmark/index.js
+
+    JSBench Start (10 cycles, async mode):
+    Test Promise...
+    Test co...
+    Test bluebird...
+    Test Q...
+    Test when...
+    Test RSVP...
+    Test async...
+    Test thenjs...
+
+    JSBench Results:
+    Q: 10 cycles, 96 ms/cycle, 10.42 ops/sec
+    Promise: 10 cycles, 82.9 ms/cycle, 12.06 ops/sec
+    when: 10 cycles, 17.7 ms/cycle, 56.50 ops/sec
+    RSVP: 10 cycles, 8.6 ms/cycle, 116.28 ops/sec
+    bluebird: 10 cycles, 8.1 ms/cycle, 123.46 ops/sec
+    async: 10 cycles, 7.6 ms/cycle, 131.58 ops/sec
+    co: 10 cycles, 6.4 ms/cycle, 156.25 ops/sec
+    thenjs: 10 cycles, 5.1 ms/cycle, 196.08 ops/sec
+
+    Q: 100%; Promise: 115.80%; when: 542.37%; RSVP: 1116.28%; bluebird: 1185.19%; async: 1263.16%; co: 1500.00%; thenjs: 1882.35%;
 
 ## API
 
@@ -42,25 +70,3 @@ A every small javascript benchmarks, base on thenjs
 
 + **cycles**：Number，可选，每个测试主体循环测试的次数，默认为 10
 + **syncMode**：Boolean，可选，是否开启同步模式，默认异步模式，testFn会注入 callback，同步模式则不会注入。
-
-## Demo
-
-    var JSBench = require('jsbench');
-
-    var jsbench = new JSBench();
-
-    jsbench.add('test1', function (callback) {
-        // test1 测试主体，异步模式必须使用 callback 结束测试
-    }).add('test2', function (callback) {
-        // test2 测试主体
-    }).add('test3', function (callback) {
-        // test3 测试主体
-    // }).on('cycle', function (e) { // 未监听则使用默认监听
-    //   console.log(e);
-    // }).on('complete', function (e) {
-    //   console.log(e);
-    // }).on('error', function (e) {
-    //   console.log(e);
-    }).run(100) // 每个测试跑 100 次
-
-更多请运行 `node test/demo.js`
