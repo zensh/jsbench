@@ -6,12 +6,15 @@
   "authors": [
     "Yan Qing <admin@zensh.com>"
   ],
-  "description": "A every small javascript benchmarks, base on thenjs!",
+  "description": "A every small javascript benchmark tool!",
   "keywords": [
     "benchmark",
     "jsbench",
     "thenjs"
   ],
+  "dependencies": {
+    "thenjs": ">=1.1.1"
+  },
   "license": "MIT",
   "ignore": [
     "**/.*",

@@ -1,6 +1,6 @@
 {
   "name": "jsbench",
-  "description": "A every small javascript benchmarks, base on thenjs!",
+  "description": "A every small javascript benchmark tool!",
   "author": {
     "name": "zensh"
   },
