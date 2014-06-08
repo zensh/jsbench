@@ -4,7 +4,7 @@
   "author": {
     "name": "zensh"
   },
-  "version": "0.3.2",
+  "version": "0.3.3",
   "main": "index.js",
   "repository": {
     "type": "git",
@@ -21,7 +21,7 @@
     "thenjs"
   ],
   "dependencies": {
-    "thenjs": ">=1.1.1"
+    "thenjs": ">=1.1.4"
   },
   "devDependencies": {
     "grunt": "~0.4.1",
