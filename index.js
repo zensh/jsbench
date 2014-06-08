@@ -1,4 +1,4 @@
-// JSBench v0.3.1
+// JSBench v0.3.2
 // A every small javascript benchmarks, base on thenjs!
 // **Github:** https://github.com/zensh/jsbench
 // **License:** MIT
@@ -66,6 +66,7 @@
     thenjs.eachSeries(list, function (cont, test, index) {
       // 异步执行每一个测试
       thenjs.defer(cont, function () {
+        var time;
         console.log('Test '+ test.name + '...');
         test.startTime = Date.now();
         test.cycles = test.error = test.endTime = test.ops = null;
@@ -74,8 +75,11 @@
           try {
             for (var i = 1; i <= cycles; i++) {
               test.cycles = i;
+              time = Date.now();
               test.test();
-              if (self._events.cycle) self.trigger('cycle', {name: test.name, cycle: i});
+              if (self._events.cycle) {
+                self.trigger('cycle', {name: test.name, cycle: i, time: Date.now() - time});
+              }
             }
             test.endTime = Date.now();
           } catch (error) {
@@ -86,11 +90,15 @@
         } else {  // 异步测试模式
           thenjs.eachSeries(new Array(cycles), function (cont2, x, index) {
             // 异步执行测试的每一个循环
-            thenjs.defer(cont2, function () {
+            var time = Date.now();
+            function contWrap(error, result) {
               test.cycles = index + 1;
-              test.test(cont2);
-              if (self._events.cycle) self.trigger('cycle', {name: test.name, cycle: index + 1});
-            });
+              if (self._events.cycle) {
+                self.trigger('cycle', {name: test.name, cycle: index + 1, time: Date.now() - time});
+              }
+              cont2(error, result);
+            }
+            test.test(contWrap);
           }).all(function (cont2, error) {
             if (error) {
               test.error = error;
@@ -112,7 +120,7 @@
         } else {
           ms = (test.endTime - test.startTime) / test.cycles;
           test.ops = 1000 / ms;
-          test.message = test.cycles + ' cycles, ' + ms + ' ms/cycle, ' + test.ops.toFixed(2) + ' ops/sec';
+          test.message = test.cycles + ' cycles, ' + ms + ' ms/cycle, ' + test.ops.toFixed(3) + ' ops/sec';
         }
       }
       // 对结果进行排序对比

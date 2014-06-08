@@ -2,9 +2,9 @@
 /*global console, Promise*/
 
 var JSBench = require('../index'),
-  len = 1000, // 任务队列长度
+  len = 10000, // 任务队列长度
   cycles = 10, // 每个测试体运行次数
-  syncMode = true; // 用同步任务测试
+  syncMode = false; // 用同步任务测试
 
 var jsbench = new JSBench();
 
@@ -29,4 +29,5 @@ jsbench.
   add('RSVP', require('./rsvp.js')(len, syncMode)).
   add('async', require('./async.js')(len, syncMode)).
   add('thenjs', require('./then.js')(len, syncMode)).
+  on('cycle', function (e) {console.log(e.name, e.cycle, e.time + 'ms')}).
   run(cycles);
