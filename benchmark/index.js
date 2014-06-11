@@ -2,7 +2,7 @@
 /*global console, Promise*/
 
 var JSBench = require('../index'),
-  len = 10000, // 任务队列长度
+  len = 5000, // 任务队列长度
   cycles = 10, // 每个测试体运行次数
   syncMode = false; // 用同步任务测试
 
@@ -24,10 +24,10 @@ try { // 检测是否支持 generator，是则加载 co 测试
 
 jsbench.
   add('bluebird', require('./bluebird.js')(len, syncMode)).
-  add('Q', require('./q.js')(len, syncMode)).
   add('when', require('./when.js')(len, syncMode)).
   add('RSVP', require('./rsvp.js')(len, syncMode)).
   add('async', require('./async.js')(len, syncMode)).
   add('thenjs', require('./then.js')(len, syncMode)).
+  add('Q', require('./q.js')(len, syncMode)).
   on('cycle', function (e) {console.log(e.name, e.cycle, e.time + 'ms')}).
   run(cycles);

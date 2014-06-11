@@ -1,4 +1,4 @@
-// JSBench v0.3.3
+// JSBench v0.3.4
 // A every small javascript benchmarks, base on thenjs!
 // **Github:** https://github.com/zensh/jsbench
 // **License:** MIT
@@ -98,7 +98,7 @@
               }
               cont2(error, result);
             }
-            test.test(contWrap);
+            thenjs.defer(contWrap, test.test, contWrap);
           }).fin(function (cont2, error) {
             if (error) {
               test.error = error;

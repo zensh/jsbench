@@ -1,4 +1,4 @@
-JSBench 0.3.3
+JSBench 0.3.4
 =======
 
 A every small javascript benchmarks, base on thenjs
