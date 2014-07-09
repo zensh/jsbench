@@ -1,4 +1,4 @@
-// JSBench v0.3.4
+// JSBench v0.3.5
 // A every small javascript benchmarks, base on thenjs!
 // **Github:** https://github.com/zensh/jsbench
 // **License:** MIT
