@@ -1,4 +1,4 @@
-// JSBench v0.3.5
+// JSBench v0.4.0
 // A every small javascript benchmarks, base on thenjs!
 // **Github:** https://github.com/zensh/jsbench
 // **License:** MIT
@@ -14,7 +14,7 @@
   } else {
     root.JSBench = factory(root.thenjs);
   }
-}(this, function (thenjs) {
+}(typeof window === 'object' ? window : this, function (thenjs) {
   'use strict';
 
   function JSBench() {
@@ -31,9 +31,7 @@
   JSBench.prototype.trigger = function (name, event) {
     var events = this._events[name];
     if (!events) return this;
-    for (var i = 0, l = events.length; i < l; i++) {
-      events[i](event);
-    }
+    for (var i = 0, l = events.length; i < l; i++) events[i](event);
     return this;
   };
 
@@ -77,9 +75,7 @@
               test.cycles = i;
               time = Date.now();
               test.test();
-              if (self._events.cycle) {
-                self.trigger('cycle', {name: test.name, cycle: i, time: Date.now() - time});
-              }
+              if (self._events.cycle) self.trigger('cycle', {name: test.name, cycle: i, time: Date.now() - time});
             }
             test.endTime = Date.now();
           } catch (error) {
@@ -93,9 +89,7 @@
             var time = Date.now();
             function contWrap(error, result) {
               test.cycles = index + 1;
-              if (self._events.cycle) {
-                self.trigger('cycle', {name: test.name, cycle: index + 1, time: Date.now() - time});
-              }
+              if (self._events.cycle) self.trigger('cycle', {name: test.name, cycle: index + 1, time: Date.now() - time});
               cont2(error, result);
             }
             thenjs.defer(contWrap, test.test, contWrap);
@@ -103,9 +97,7 @@
             if (error) {
               test.error = error;
               self.trigger('error', {name: test.name, error: error});
-            } else {
-              test.endTime = Date.now();
-            }
+            } else test.endTime = Date.now();
             cont();
           });
         }
@@ -115,9 +107,8 @@
       // 测试完毕，计算结果
       for (var i = 0; i < list.length; i++) {
         test = list[i];
-        if (test.error) {
-          test.message = test.error;
-        } else {
+        if (test.error) test.message = test.error;
+        else {
           ms = (test.endTime - test.startTime) / test.cycles;
           test.ops = 1000 / ms;
           test.message = test.cycles + ' cycles, ' + ms + ' ms/cycle, ' + test.ops.toFixed(3) + ' ops/sec';
@@ -130,9 +121,8 @@
       for (i = 0; i < ranking.length; i++) {
         test = ranking[i];
         if (!test.ops) continue;
-        if (base) {
-          result += ' ' + test.name + ': ' + (test.ops * 100 / base).toFixed(2) + '%;';
-        } else {
+        if (base) result += ' ' + test.name + ': ' + (test.ops * 100 / base).toFixed(2) + '%;';
+        else {
           base = test.ops;
           result = '\n' + test.name + ': 100%;';
         }

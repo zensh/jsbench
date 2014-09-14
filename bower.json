@@ -1,7 +1,7 @@
 {
   "name": "jsbench",
   "main": "index.js",
-  "version": "0.3.5",
+  "version": "0.4.0",
   "homepage": "https://github.com/zensh/jsbench",
   "authors": [
     "Yan Qing <admin@zensh.com>"
@@ -13,7 +13,7 @@
     "thenjs"
   ],
   "dependencies": {
-    "thenjs": ">=1.1.1"
+    "thenjs": ">=1.4.x"
   },
   "license": "MIT",
   "ignore": [

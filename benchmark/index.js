@@ -3,8 +3,8 @@
 
 var JSBench = require('../index.js'),
   len = 1000, // 任务队列长度
-  cycles = 100, // 每个测试体运行次数
-  syncMode = true; // 用同步任务测试
+  cycles = 500, // 每个测试体运行次数
+  syncMode = false; // 用同步任务测试
 
 var jsbench = new JSBench();
 
