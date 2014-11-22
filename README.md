@@ -1,7 +1,9 @@
-JSBench 0.4.0
+JSBench 0.5.0 [![Build Status](https://travis-ci.org/zensh/jsbench.svg)](https://travis-ci.org/zensh/jsbench)
 =======
 
-A every small javascript benchmarks, base on thenjs
+A every small javascript benchmarks, rely on thunks.
+
+## [thunks](https://github.com/thunks/thunks)
 
 ## Install
 
@@ -11,36 +13,41 @@ A every small javascript benchmarks, base on thenjs
 
 **Browser:**
 
-    <script src="/pathTo/then.js"></script>
+    <script src="/pathTo/thunks.js"></script>
     <script src="/pathTo/jsbench/index.js"></script>
 
 ## DEMO
 
-**`node --harmony benchmark/index.js`:**
+```sh
+➜  jsbench git:(master) node --harmony benchmark/index
+Sync Benchmark...
 
-    [root@centos jsbench]# node benchmark/index.js
+JSBench Start (100 cycles, async mode):
+Test Promise...
+Test co...
+Test thunks-generator...
+Test bluebird...
+Test when...
+Test RSVP...
+Test async...
+Test thenjs...
+Test thunks...
 
-    JSBench Start (10 cycles, async mode):
-    Test Promise...
-    Test co...
-    Test bluebird...
-    Test Q...
-    Test when...
-    Test RSVP...
-    Test async...
-    Test thenjs...
+JSBench Results:
+Promise: 100 cycles, 31.02 ms/cycle, 32.237 ops/sec
+co: 100 cycles, 30.53 ms/cycle, 32.755 ops/sec
+async: 100 cycles, 2.88 ms/cycle, 347.222 ops/sec
+RSVP: 100 cycles, 1.84 ms/cycle, 543.478 ops/sec
+when: 100 cycles, 1.42 ms/cycle, 704.225 ops/sec
+bluebird: 100 cycles, 1.41 ms/cycle, 709.220 ops/sec
+thenjs: 100 cycles, 0.83 ms/cycle, 1204.819 ops/sec
+thunks: 100 cycles, 0.75 ms/cycle, 1333.333 ops/sec
+thunks-generator: 100 cycles, 0.67 ms/cycle, 1492.537 ops/sec
 
-    JSBench Results:
-    Q: 10 cycles, 96 ms/cycle, 10.42 ops/sec
-    Promise: 10 cycles, 82.9 ms/cycle, 12.06 ops/sec
-    when: 10 cycles, 17.7 ms/cycle, 56.50 ops/sec
-    RSVP: 10 cycles, 8.6 ms/cycle, 116.28 ops/sec
-    bluebird: 10 cycles, 8.1 ms/cycle, 123.46 ops/sec
-    async: 10 cycles, 7.6 ms/cycle, 131.58 ops/sec
-    co: 10 cycles, 6.4 ms/cycle, 156.25 ops/sec
-    thenjs: 10 cycles, 5.1 ms/cycle, 196.08 ops/sec
+Promise: 100%; co: 101.60%; async: 1077.08%; RSVP: 1685.87%; when: 2184.51%; bluebird: 2200.00%; thenjs: 3737.35%; thunks: 4136.00%; thunks-generator: 4629.85%;
 
-    Q: 100%; Promise: 115.80%; when: 542.37%; RSVP: 1116.28%; bluebird: 1185.19%; async: 1263.16%; co: 1500.00%; thenjs: 1882.35%;
+JSBench Completed!
+```
 
 ## API
 
@@ -66,7 +73,7 @@ A every small javascript benchmarks, base on thenjs
 
 ###JSBench.prototype.run([cycles, syncMode])
 
-开始测试。各个测试异步串行执行，即完成一个测试后才会开始下一个。每个测试的循环测试也为异步串行执行。
+开始测试。各个测试异步串行执行，即完成一个测试后才会开始下一个。每个测试的循环测试也为异步串行执行。返回 thunk。
 
 + **cycles**：Number，可选，每个测试主体循环测试的次数，默认为 10
 + **syncMode**：Boolean，可选，是否开启同步模式，默认异步模式，testFn会注入 callback，同步模式则不会注入。

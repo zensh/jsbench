@@ -1,5 +1,5 @@
 'use strict';
-/*global Promise */
+/*global console*/
 
 var Thunk = require('thunks')();
 
@@ -25,21 +25,22 @@ module.exports = function (len, syncMode) {
   }
 
   return function (callback) {
-    // Thunk 测试主体
-    Thunk.all(list.map(function (i) { // 并行 list 队列
-      return task;
-    }))(function () { // 串行 tasks 队列
-      return Thunk.seq(list.map(function (i) {
+    // Thunk generator 测试主体
+    Thunk(function *(){
+      // 并行 list 队列
+      yield list.map(function (i) {
         return task;
-      }));
-    })(function () {
-      return Thunk.all(tasks.map(function (sunTask) { // 并行 tasks 队列
-        return sunTask;
-      }));
-    })(function () { // 串行 tasks 队列
-      return Thunk.seq(tasks.map(function (sunTask) { // 并行 tasks 队列
-        return sunTask;
-      }));
+      });
+      // 串行 list 队列
+      for (var i = 0, l = list.length; i < l; i++) {
+        yield task;
+      }
+      // 并行 tasks 队列
+      yield tasks;
+      // 串行 tasks 队列
+      for (i = 0, l = tasks.length; i < l; i++) {
+        yield tasks[i];
+      }
     })(callback);
   };
 };

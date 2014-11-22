@@ -4,7 +4,7 @@
   "author": [
     "Yan Qing <admin@zensh.com>"
   ],
-  "version": "0.4.0",
+  "version": "0.5.0",
   "main": "index.js",
   "repository": {
     "type": "git",
@@ -13,28 +13,33 @@
   "homepage": "https://github.com/zensh/jsbench",
   "keywords": [
     "benchmark",
-    "thenjs"
-  ],
-  "tags": [
-    "benchmark",
-    "jsbench",
-    "thenjs"
+    "thunks",
+    "thunk",
+    "jsbench"
   ],
   "dependencies": {
-    "thenjs": ">=1.4.x"
+    "thunks": ">=2.1.0"
   },
   "devDependencies": {
-    "grunt": "~0.4.1",
-    "grunt-contrib-jshint": "~0.7.2",
+    "gulp": ">=3.8.0",
+    "gulp-jshint": ">=1.8.4",
+    "gulp-sequence": ">=0.3.1",
+    "thenjs": ">=1.4.0",
     "async": ">=0.9.0",
     "bluebird": ">=1.2.4",
-    "co": ">=3.0.0",
-    "q": ">=1.0.1",
+    "co": ">=4.0.0",
     "rsvp": ">=3.0.6",
-    "when": ">=3.2.2",
-    "thunks": ">=1.2.x"
+    "when": ">=3.2.2"
   },
   "scripts": {
-    "test": "grunt test"
-  }
+    "test": "node --harmony `which gulp`"
+  },
+  "ignore": [
+    "**/.*",
+    "test",
+    "examples",
+    "gulpfile.js",
+    "bower.json",
+    "component.json"
+  ]
 }

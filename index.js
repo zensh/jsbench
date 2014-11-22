@@ -1,5 +1,3 @@
-// JSBench v0.4.0
-// A every small javascript benchmarks, base on thenjs!
 // **Github:** https://github.com/zensh/jsbench
 // **License:** MIT
 
@@ -7,31 +5,35 @@
 (function (root, factory) {
   'use strict';
 
-  if (typeof module === 'object' && typeof module.exports === 'object') {
-    module.exports = factory(require('thenjs'));
-  } else if (typeof define === 'function' && define.amd) {
-    define(['thenjs'], factory);
-  } else {
-    root.JSBench = factory(root.thenjs);
-  }
-}(typeof window === 'object' ? window : this, function (thenjs) {
+  if (typeof module === 'object' && module.exports) module.exports = factory(require('thunks'));
+  else if (typeof define === 'function' && define.amd) define(['thunks'], factory);
+  else root.JSBench = factory(root.thunks);
+}(typeof window === 'object' ? window : this, function (thunks) {
   'use strict';
+
+  var Thunk = thunks();
+
+  function forEach(array, iterator) {
+    for (var i = 0, len = array >= 0 ? array : array.length; i < len; i++) iterator(array[i], i);
+  }
 
   function JSBench() {
     this._list = [];
     this._events = {};
   }
 
-  JSBench.prototype.on = function (name, listener) {
-    var events = this._events[name] || (this._events[name] = []);
-    events.push(listener);
+  JSBench.prototype.on = function (type, listener) {
+    this._events[type] = this._events[type] || [];
+    this._events[type].push(listener);
     return this;
   };
 
-  JSBench.prototype.trigger = function (name, event) {
-    var events = this._events[name];
+  JSBench.prototype.trigger = function (type, value) {
+    var events = this._events[type];
     if (!events) return this;
-    for (var i = 0, l = events.length; i < l; i++) events[i](event);
+    forEach(events, function (listener) {
+      listener(value);
+    });
     return this;
   };
 
@@ -41,96 +43,107 @@
   };
 
   JSBench.prototype.run = function (cycles, syncMode) {
-    var self = this, list = self._list;
+    var ctx = this, list = ctx._list;
 
     cycles = cycles >= 1 ? +cycles : 10;
-    if (!self._events.error) { // 如果未定义，则使用默认的 error 监听
-      self.on('error', function (e) {
+    if (!ctx._events.error) { // 如果未定义，则使用默认的 error 监听
+      ctx.on('error', function (e) {
         console.error(e.name + ' error: ' + e.error);
       });
     }
-    if (!self._events.complete) { // 如果未定义，则使用默认的 complete 监听
-      self.on('complete', function (e) {
+    if (!ctx._events.complete) { // 如果未定义，则使用默认的 complete 监听
+      ctx.on('complete', function (e) {
         console.log('\nJSBench Results:');
-        for (var i = 0; i < e.ranking.length; i++) {
-          console.log(e.ranking[i].name + ': ' + e.ranking[i].message);
-        }
+        forEach(e.ranking, function (test) {
+          console.log(test.name + ': ' + test.message);
+        });
         console.log(e.result);
       });
     }
 
     // 按顺序串行执行各个测试
     console.log('\nJSBench Start (' + cycles + ' cycles, ' + (syncMode ? 'sync' : 'async') + ' mode):');
-    thenjs.eachSeries(list, function (cont, test, index) {
+    return Thunk.seq(list.map(function (test) {
       // 异步执行每一个测试
-      thenjs.defer(cont, function () {
-        var time;
-        console.log('Test '+ test.name + '...');
-        test.startTime = Date.now();
-        test.cycles = test.error = test.endTime = test.ops = null;
+      return function (callback) {
+        return Thunk.delay(0)(function () {
+          console.log('Test '+ test.name + '...');
+          test.startTime = Date.now();
+          test.cycles = test.error = test.endTime = test.ops = null;
 
-        if (syncMode) { // 同步测试模式
-          try {
-            for (var i = 1; i <= cycles; i++) {
-              test.cycles = i;
-              time = Date.now();
-              test.test();
-              if (self._events.cycle) self.trigger('cycle', {name: test.name, cycle: i, time: Date.now() - time});
+          if (syncMode) { // 同步测试模式
+            try {
+              forEach(cycles, function (nil, index) {
+                test.cycles = index;
+                var time = Date.now();
+                test.test();
+                if (ctx._events.cycle) ctx.trigger('cycle', {name: test.name, cycle: index, time: Date.now() - time});
+              });
+              test.endTime = Date.now();
+            } catch (error) {
+              // 某一测试任务报错不影响后续测试
+              test.error = error;
+              ctx.trigger('error', {name: test.name, error: error});
             }
-            test.endTime = Date.now();
-          } catch (error) {
-            test.error = error;
-            self.trigger('error', {name: test.name, error: error});
+            return;
           }
-          cont(); // 某一测试任务报错不影响后续测试
-        } else {  // 异步测试模式
-          thenjs.eachSeries(new Array(cycles), function (cont2, x, index) {
-            // 异步执行测试的每一个循环
-            var time = Date.now();
-            function contWrap(error, result) {
-              test.cycles = index + 1;
-              if (self._events.cycle) self.trigger('cycle', {name: test.name, cycle: index + 1, time: Date.now() - time});
-              cont2(error, result);
-            }
-            thenjs.defer(contWrap, test.test, contWrap);
-          }).fin(function (cont2, error) {
+
+          var cycleQueue = [];
+          forEach(cycles, function (nil, index) {
+            cycleQueue.push(function (callback) {
+              var time = Date.now();
+              // 异步执行测试的每一个循环
+              return Thunk.delay(0)(function () {
+                return test.test;
+              })(function (error) {
+                if (error) throw error;
+                test.cycles = index + 1;
+                if (ctx._events.cycle) ctx.trigger('cycle', {name: test.name, cycle: index + 1, time: Date.now() - time});
+              })(callback);
+            });
+          });
+
+          return Thunk.seq(cycleQueue)(function (error) {
             if (error) {
               test.error = error;
-              self.trigger('error', {name: test.name, error: error});
+              ctx.trigger('error', {name: test.name, error: error});
             } else test.endTime = Date.now();
-            cont();
           });
-        }
-      });
-    }).then(function () {
+        })(callback);
+      };
+    }))(function (error) {
+      if (error) {
+        ctx.trigger('error', {name: 'JSBench', error: error});
+        throw error;
+      }
+
       var result, test, base, ms, ranking = list.slice();
       // 测试完毕，计算结果
-      for (var i = 0; i < list.length; i++) {
-        test = list[i];
+      forEach(list, function (test) {
         if (test.error) test.message = test.error;
         else {
           ms = (test.endTime - test.startTime) / test.cycles;
           test.ops = 1000 / ms;
           test.message = test.cycles + ' cycles, ' + ms + ' ms/cycle, ' + test.ops.toFixed(3) + ' ops/sec';
         }
-      }
+      });
       // 对结果进行排序对比
       ranking.sort(function (a, b) {
         return a.ops - b.ops;
       });
-      for (i = 0; i < ranking.length; i++) {
-        test = ranking[i];
-        if (!test.ops) continue;
+
+      forEach(ranking, function (test) {
+        if (!test.ops) return;
         if (base) result += ' ' + test.name + ': ' + (test.ops * 100 / base).toFixed(2) + '%;';
         else {
           base = test.ops;
           result = '\n' + test.name + ': 100%;';
         }
-      }
-      self.trigger('complete', {result: result, ranking: ranking});
+      });
+
+      ctx.trigger('complete', {result: result, ranking: ranking});
       console.log('\nJSBench Completed!');
-    }).fail(function (cont, error) {
-      self.trigger('error', {name: 'JSBench', error: error});
+      return ranking;
     });
   };
 

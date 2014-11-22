@@ -3,8 +3,8 @@
 
 var JSBench = require('../index.js'),
   len = 1000, // 任务队列长度
-  cycles = 500, // 每个测试体运行次数
-  syncMode = false; // 用同步任务测试
+  cycles = 100, // 每个测试体运行次数
+  syncMode = true; // 用同步任务测试
 
 var jsbench = new JSBench();
 
@@ -17,20 +17,21 @@ if (typeof Promise === 'function') {
   console.log('Not support Promise!');
 }
 
-try { // 检测是否支持 generator，是则加载 co 测试
+try { // 检测是否支持 generator
+  /*jshint -W054 */
   var check = new Function('return function*(){}');
   jsbench.add('co', require('./co.js')(len, syncMode));
+  jsbench.add('thunks-generator', require('./thunks-gen.js')(len, syncMode));
 } catch (e) {
   console.log('Not support generator!');
 }
 
-jsbench.
-  add('bluebird', require('./bluebird.js')(len, syncMode)).
-  add('when', require('./when.js')(len, syncMode)).
-  add('RSVP', require('./rsvp.js')(len, syncMode)).
-  add('async', require('./async.js')(len, syncMode)).
-  add('thenjs', require('./then.js')(len, syncMode)).
-  add('thunks', require('./thunks.js')(len, syncMode)).
-  add('Q', require('./q.js')(len, syncMode)).
+module.exports = jsbench
+  .add('bluebird', require('./bluebird.js')(len, syncMode))
+  .add('when', require('./when.js')(len, syncMode))
+  .add('RSVP', require('./rsvp.js')(len, syncMode))
+  .add('async', require('./async.js')(len, syncMode))
+  .add('thenjs', require('./then.js')(len, syncMode))
+  .add('thunks', require('./thunks.js')(len, syncMode))
   // on('cycle', function (e) {console.log(e.name, e.cycle, e.time + 'ms')}).
-  run(cycles);
+  .run(cycles);
