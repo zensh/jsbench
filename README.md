@@ -1,4 +1,4 @@
-JSBench 0.5.0 [![Build Status](https://travis-ci.org/zensh/jsbench.svg)](https://travis-ci.org/zensh/jsbench)
+JSBench 0.5.1 [![Build Status](https://travis-ci.org/zensh/jsbench.svg)](https://travis-ci.org/zensh/jsbench)
 =======
 
 A every small javascript benchmarks, rely on thunks.

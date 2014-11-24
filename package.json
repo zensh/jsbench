@@ -4,7 +4,7 @@
   "author": [
     "Yan Qing <admin@zensh.com>"
   ],
-  "version": "0.5.0",
+  "version": "0.5.1",
   "main": "index.js",
   "repository": {
     "type": "git",
@@ -18,7 +18,7 @@
     "jsbench"
   ],
   "dependencies": {
-    "thunks": ">=2.1.0"
+    "thunks": ">=2.2.0"
   },
   "devDependencies": {
     "gulp": ">=3.8.0",
