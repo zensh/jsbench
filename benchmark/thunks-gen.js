@@ -1,19 +1,23 @@
 'use strict';
 /*global console*/
 
-var Thunk = require('thunks')();
+var thunk = require('thunks')();
 
-module.exports = function (len, syncMode) {
+module.exports = function(len, syncMode) {
   var task, list = [], tasks = [];
 
   if (syncMode) { // 模拟同步任务
-    task = function (callback) {
-      callback(null, 1);
+    task = function(x) {
+      return thunk(function(callback) {
+        callback(null, x);
+      });
     };
   } else { // 模拟异步任务
-    task = function (callback) {
-      setImmediate(function () {
-        callback(null, 1);
+    task = function(x, callback) {
+      return thunk(function(callback) {
+        setImmediate(function() {
+          callback(null, x);
+        });
       });
     };
   }
@@ -24,22 +28,24 @@ module.exports = function (len, syncMode) {
     tasks[i] = task;
   }
 
-  return function (callback) {
+  return function(callback) {
     // Thunk generator 测试主体
-    Thunk(function *(){
+    thunk(function *(){
       // 并行 list 队列
-      yield list.map(function (i) {
-        return task;
+      yield list.map(function(i) {
+        return task(i);
       });
       // 串行 list 队列
       for (var i = 0, l = list.length; i < l; i++) {
-        yield task;
+        yield task(i);
       }
       // 并行 tasks 队列
-      yield tasks;
+      yield tasks.map(function(task, i) {
+        return task(i);
+      });
       // 串行 tasks 队列
       for (i = 0, l = tasks.length; i < l; i++) {
-        yield tasks[i];
+        yield tasks[i](i);
       }
     })(callback);
   };

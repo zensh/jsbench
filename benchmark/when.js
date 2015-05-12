@@ -1,20 +1,22 @@
 'use strict';
 /*global console*/
 
-var when = require('when');
+var When = require('when');
 
-module.exports = function (len, syncMode) {
+module.exports = function(len, syncMode) {
   var task, list = [], tasks = [];
 
   if (syncMode) { // 模拟同步任务
-    task = function () {
-      return when.resolve(1);
+    task = function(x) {
+      return new When.Promise(function(resolve, reject) {
+        resolve(x);
+      });
     };
   } else { // 模拟异步任务
-    task = function () {
-      return when.promise(function (resolve) {
-        setImmediate(function () {
-          resolve(1);
+    task = function(x) {
+      return new When.Promise(function(resolve, reject) {
+        setImmediate(function() {
+          resolve(x);
         });
       });
     };
@@ -26,29 +28,29 @@ module.exports = function (len, syncMode) {
     tasks[i] = task;
   }
 
-  return function (callback) {
-    // when 测试主体
-    when.map(list, function (i) { // 并行 list 队列
-      return task();
+  return function(callback) {
+    // When 测试主体
+    When.map(list, function(i) { // 并行 list 队列
+      return task(i);
     })
-    .then(function () { // 串行 list 队列
-      return when.reduce(list, function (x, i) {
+    .then(function() { // 串行 list 队列
+      return When.reduce(list, function(x, i) {
         return task(i);
       }, 1);
     })
-    .then(function () { // 并行 tasks 队列
-      return when.all(tasks.map(function (subTask) {
-        return subTask();
+    .then(function() { // 并行 tasks 队列
+      return When.all(tasks.map(function(subTask, i) {
+        return subTask(i);
       }));
     })
-    .then(function () {  // 串行 tasks 队列
-      return tasks.reduce(function (promise, subTask) {
-        return promise.then(function () {
-          return subTask();
+    .then(function() {  // 串行 tasks 队列
+      return tasks.reduce(function(promise, subTask, i) {
+        return promise.then(function() {
+          return subTask(i);
         });
-      }, when.resolve(1));
+      }, When.resolve(1));
     })
-    .then(function () {
+    .then(function() {
       return callback();
     });
   };

@@ -4,7 +4,7 @@
   "author": [
     "Yan Qing <admin@zensh.com>"
   ],
-  "version": "0.5.1",
+  "version": "0.5.2",
   "main": "index.js",
   "repository": {
     "type": "git",
@@ -18,18 +18,18 @@
     "jsbench"
   ],
   "dependencies": {
-    "thunks": ">=2.2.0"
+    "thunks": ">=3.0.2"
   },
   "devDependencies": {
-    "gulp": ">=3.8.0",
-    "gulp-jshint": ">=1.8.4",
-    "gulp-sequence": ">=0.3.1",
-    "thenjs": ">=1.4.0",
-    "async": ">=0.9.0",
-    "bluebird": ">=1.2.4",
-    "co": ">=4.0.0",
-    "rsvp": ">=3.0.6",
-    "when": ">=3.2.2"
+    "gulp": "^3.8.11",
+    "gulp-jshint": "^1.10.0",
+    "gulp-sequence": "^0.3.2",
+    "thenjs": "^1.5.0",
+    "async": "^0.9.0",
+    "bluebird": "^2.9.25",
+    "co": "^4.5.4",
+    "rsvp": "^3.0.18",
+    "when": "^3.7.3"
   },
   "scripts": {
     "test": "node --harmony `which gulp`"
