@@ -3,7 +3,7 @@
 
 var JSBench = require('../index'),
   len = 1000, // 任务队列长度
-  cycles = 1000, // 每个测试体运行次数
+  cycles = 100, // 每个测试体运行次数
   syncMode = false; // 用同步任务测试
 
 var jsbench = new JSBench();
@@ -26,7 +26,7 @@ try { // 检测是否支持 generator
   console.log('Not support generator!');
 }
 
-jsbench
+module.exports = jsbench
   .add('bluebird', require('./bluebird.js')(len, syncMode))
   .add('when', require('./when.js')(len, syncMode))
   .add('RSVP', require('./rsvp.js')(len, syncMode))
