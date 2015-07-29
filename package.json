@@ -4,7 +4,7 @@
   "author": [
     "Yan Qing <admin@zensh.com>"
   ],
-  "version": "0.5.3",
+  "version": "0.5.4",
   "main": "index.js",
   "repository": {
     "type": "git",
@@ -18,21 +18,21 @@
     "jsbench"
   ],
   "dependencies": {
-    "thunks": ">=3.0.2"
+    "thunks": ">=3.5.0"
   },
   "devDependencies": {
-    "gulp": "^3.8.11",
-    "gulp-jshint": "^1.10.0",
-    "gulp-sequence": "^0.3.2",
-    "thenjs": "^1.5.0",
-    "async": "^0.9.0",
-    "bluebird": "^2.9.25",
-    "co": "^4.5.4",
-    "rsvp": "^3.0.18",
-    "when": "^3.7.3"
+    "gulp": "^3.9.0",
+    "gulp-sequence": "^0.4.0",
+    "thenjs": "^2.0.0",
+    "async": "^1.4.0",
+    "bluebird": "^2.9.34",
+    "co": "^4.6.0",
+    "rsvp": "^3.0.20",
+    "when": "^3.7.3",
+    "standard": "^4.5.4"
   },
   "scripts": {
-    "test": "node --harmony `which gulp`"
+    "test": "standard && node --harmony `which gulp`"
   },
   "ignore": [
     "**/.*",
