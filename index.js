@@ -42,11 +42,11 @@
     return this
   }
 
-  JSBench.prototype.run = function (cycles, syncMode) {
+  JSBench.prototype.run = function (cycles) {
     var ctx = this
     var list = ctx._list
 
-    cycles = cycles >= 1 ? +cycles : 10
+    cycles = cycles >= 1 ? Math.floor(cycles) : 10
     if (!ctx._events.error) { // 如果未定义，则使用默认的 error 监听
       ctx.on('error', function (e) {
         console.error(e.name + ' error: ' + e.error)
@@ -63,39 +63,23 @@
     }
 
     // 按顺序串行执行各个测试
-    console.log('\nJSBench Start (' + cycles + ' cycles, ' + (syncMode ? 'sync' : 'async') + ' mode):')
+    console.log('\nJSBench Start, ' + cycles + ' cycles:')
     return thunk.seq(list.map(function (test) {
       // 异步执行每一个测试
       return function (callback) {
-        return thunk.delay(0)(function () {
+        return thunk.delay()(function () {
           console.log('Test ' + test.name + '...')
           test.startTime = Date.now()
           test.cycles = test.error = test.endTime = test.ops = null
 
-          if (syncMode) { // 同步测试模式
-            try {
-              forEach(cycles, function (nil, index) {
-                test.cycles = index
-                var time = Date.now()
-                test.test()
-                if (ctx._events.cycle) ctx.trigger('cycle', {name: test.name, cycle: index, time: Date.now() - time})
-              })
-              test.endTime = Date.now()
-            } catch (error) {
-              // 某一测试任务报错不影响后续测试
-              test.error = error
-              ctx.trigger('error', {name: test.name, error: error})
-            }
-            return
-          }
-
           var cycleQueue = []
-          forEach(cycles, function (nil, index) {
+          var testFn = !test.test.length ? test.test : function () { return test.test }
+          forEach(cycles, function (_, index) {
             cycleQueue.push(function (callback) {
               var time = Date.now()
               // 异步执行测试的每一个循环
-              return thunk.delay(0)(function () {
-                return test.test
+              return thunk.delay()(function () {
+                return testFn()
               })(function (error) {
                 if (error) throw error
                 test.cycles = index + 1
@@ -105,10 +89,11 @@
           })
 
           return thunk.seq(cycleQueue)(function (error) {
-            if (error) {
+            if (error == null) test.endTime = Date.now()
+            else {
               test.error = error
               ctx.trigger('error', {name: test.name, error: error})
-            } else test.endTime = Date.now()
+            }
           })
         })(callback)
       }

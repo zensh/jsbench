@@ -1,7 +1,10 @@
-JSBench 0.5.1 [![Build Status](https://travis-ci.org/zensh/jsbench.svg)](https://travis-ci.org/zensh/jsbench)
+JSBench
 =======
 
 A every small javascript benchmarks, rely on thunks.
+
+[![NPM version][npm-image]][npm-url]
+[![Build Status][travis-image]][travis-url]
 
 ## [thunks](https://github.com/thunks/thunks)
 
@@ -56,7 +59,7 @@ JSBench Completed!
 添加测试。
 
 + **testName**：String，测试名称
-+ **testFn**：Function，function (callback) { //测试主体，异步模式必须使用 callback 结束测试 }
++ **testFn**：Function，可以为普通同步函数，thunk 异步函数或 generator 异步函数
 
 ###JSBench.prototype.on(eventName, listener)
 
@@ -71,9 +74,15 @@ JSBench Completed!
 
 **complete**: 所有测试完成后触发，event 为 `{result: result, ranking: testArray}`，其中 result 为测试结果对比，ranking为按测试结果排序的数组，包含每个测试的详细信息。
 
-###JSBench.prototype.run([cycles, syncMode])
+###JSBench.prototype.run([cycles])
 
 开始测试。各个测试异步串行执行，即完成一个测试后才会开始下一个。每个测试的循环测试也为异步串行执行。返回 thunk。
 
 + **cycles**：Number，可选，每个测试主体循环测试的次数，默认为 10
-+ **syncMode**：Boolean，可选，是否开启同步模式，默认异步模式，testFn会注入 callback，同步模式则不会注入。
+
+
+[npm-url]: https://npmjs.org/package/jsbench
+[npm-image]: http://img.shields.io/npm/v/jsbench.svg
+
+[travis-url]: https://travis-ci.org/zensh/jsbench
+[travis-image]: http://img.shields.io/travis/zensh/jsbench.svg
