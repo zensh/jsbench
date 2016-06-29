@@ -5,6 +5,7 @@ A every small javascript benchmarks, rely on thunks.
 
 [![NPM version][npm-image]][npm-url]
 [![Build Status][travis-image]][travis-url]
+[![Downloads][downloads-image]][downloads-url]
 
 ## [thunks](https://github.com/thunks/thunks)
 
@@ -22,10 +23,14 @@ A every small javascript benchmarks, rely on thunks.
 ## DEMO
 
 ```sh
-➜  jsbench git:(master) node --harmony benchmark/index
-Sync Benchmark...
+➜  jsbench git:(master) npm test
 
-JSBench Start (100 cycles, async mode):
+> jsbench@1.0.1 test /Users/zensh/git/js/jsbench
+> standard && node bench/index
+
+Async Benchmark...
+
+JSBench Start, 1000 cycles:
 Test Promise...
 Test co...
 Test thunks-generator...
@@ -37,17 +42,17 @@ Test thenjs...
 Test thunks...
 
 JSBench Results:
-Promise: 100 cycles, 31.02 ms/cycle, 32.237 ops/sec
-co: 100 cycles, 30.53 ms/cycle, 32.755 ops/sec
-async: 100 cycles, 2.88 ms/cycle, 347.222 ops/sec
-RSVP: 100 cycles, 1.84 ms/cycle, 543.478 ops/sec
-when: 100 cycles, 1.42 ms/cycle, 704.225 ops/sec
-bluebird: 100 cycles, 1.41 ms/cycle, 709.220 ops/sec
-thenjs: 100 cycles, 0.83 ms/cycle, 1204.819 ops/sec
-thunks: 100 cycles, 0.75 ms/cycle, 1333.333 ops/sec
-thunks-generator: 100 cycles, 0.67 ms/cycle, 1492.537 ops/sec
+Promise: 1000 cycles, 16.546 ms/cycle, 60.438 ops/sec
+co: 1000 cycles, 15.465 ms/cycle, 64.662 ops/sec
+RSVP: 1000 cycles, 10.85 ms/cycle, 92.166 ops/sec
+bluebird: 1000 cycles, 9.733 ms/cycle, 102.743 ops/sec
+when: 1000 cycles, 8.251 ms/cycle, 121.197 ops/sec
+async: 1000 cycles, 5.566 ms/cycle, 179.662 ops/sec
+thunks: 1000 cycles, 5.156 ms/cycle, 193.949 ops/sec
+thenjs: 1000 cycles, 4.986 ms/cycle, 200.562 ops/sec
+thunks-generator: 1000 cycles, 4.919 ms/cycle, 203.293 ops/sec
 
-Promise: 100%; co: 101.60%; async: 1077.08%; RSVP: 1685.87%; when: 2184.51%; bluebird: 2200.00%; thenjs: 3737.35%; thunks: 4136.00%; thunks-generator: 4629.85%;
+Promise: 100%; co: 106.99%; RSVP: 152.50%; bluebird: 170.00%; when: 200.53%; async: 297.27%; thunks: 320.91%; thenjs: 331.85%; thunks-generator: 336.37%;
 
 JSBench Completed!
 ```
@@ -86,3 +91,6 @@ JSBench Completed!
 
 [travis-url]: https://travis-ci.org/zensh/jsbench
 [travis-image]: http://img.shields.io/travis/zensh/jsbench.svg
+
+[downloads-url]: https://npmjs.org/package/jsbench
+[downloads-image]: http://img.shields.io/npm/dm/jsbench.svg?style=flat-square

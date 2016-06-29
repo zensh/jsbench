@@ -4,7 +4,7 @@
   "author": [
     "Yan Qing <admin@zensh.com>"
   ],
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "index.js",
   "repository": {
     "type": "git",
@@ -18,19 +18,19 @@
     "jsbench"
   ],
   "dependencies": {
-    "thunks": ">=4.1.2"
+    "thunks": ">=4.2.2"
   },
   "devDependencies": {
-    "thenjs": "^2.0.2",
+    "thenjs": "^2.0.3",
     "async": "^1.5.2",
-    "bluebird": "^3.1.5",
+    "bluebird": "^3.4.1",
     "co": "^4.6.0",
-    "rsvp": "^3.1.0",
+    "rsvp": "^3.2.1",
     "when": "^3.7.7",
-    "standard": "^5.4.1"
+    "standard": "^7.1.2"
   },
   "scripts": {
-    "test": "standard && node ./bench/index"
+    "test": "standard && node bench/index"
   },
   "files": [
     "README.md",
