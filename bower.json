@@ -1,7 +1,7 @@
 {
   "name": "jsbench",
   "main": "index.js",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "homepage": "https://github.com/zensh/jsbench",
   "authors": [
     "Yan Qing <admin@zensh.com>"

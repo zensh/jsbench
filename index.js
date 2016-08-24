@@ -113,7 +113,7 @@
         else {
           ms = (test.endTime - test.startTime) / test.cycles
           test.ops = 1000 / ms
-          test.message = test.cycles + ' cycles, ' + ms + ' ms/cycle, ' + test.ops.toFixed(3) + ' ops/sec'
+          test.message = test.cycles + ' cycles, ' + ms + ' ms/cycle, ' + test.ops.toFixed(3) + ' ops'
         }
       })
       // 对结果进行排序对比

@@ -1,5 +1,5 @@
 'use strict'
-/*global Promise */
+/* global Promise */
 
 var thunk = require('thunks')()
 
@@ -15,7 +15,7 @@ module.exports = function (len, syncMode) {
       }
     }
   } else { // 模拟异步任务
-    task = function (x, callback) {
+    task = function (x) {
       return function (callback) {
         setImmediate(function () {
           callback(null, x)
