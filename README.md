@@ -15,11 +15,6 @@ A every small javascript benchmarks, rely on thunks.
 
     npm install jsbench
 
-**Browser:**
-
-    <script src="/pathTo/thunks.js"></script>
-    <script src="/pathTo/jsbench/index.js"></script>
-
 ## DEMO
 
 ```sh

@@ -17,6 +17,12 @@
     for (var i = 0, len = array >= 0 ? array : array.length; i < len; i++) iterator(array[i], i)
   }
 
+  function toThunkableFn (fn) {
+    if (typeof fn !== 'function') throw new TypeError('test must be function!')
+    if (thunks.isThunkableFn(fn)) return fn
+    return function (done) { thunk(fn())(done) }
+  }
+
   function JSBench () {
     this._list = []
     this._events = {}
@@ -38,7 +44,7 @@
   }
 
   JSBench.prototype.add = function (name, test) {
-    this._list.push({name: name, test: test})
+    this._list.push({name: name, test: toThunkableFn(test)})
     return this
   }
 
@@ -73,18 +79,19 @@
           test.cycles = test.error = test.endTime = test.ops = null
 
           var cycleQueue = []
-          var testFn = !test.test.length ? test.test : function () { return test.test }
+          var testFn = test.test
           forEach(cycles, function (_, index) {
-            cycleQueue.push(function (callback) {
+            cycleQueue.push(thunk.delay(), function (done) {
               var time = Date.now()
               // 异步执行测试的每一个循环
-              return thunk.delay()(function () {
-                return testFn()
-              })(function (error) {
+              thunk(testFn)(function (error) {
                 if (error) throw error
                 test.cycles = index + 1
-                if (ctx._events.cycle) ctx.trigger('cycle', {name: test.name, cycle: index + 1, time: Date.now() - time})
-              })(callback)
+                if (ctx._events.cycle) {
+                  ctx.trigger('cycle',
+                    {name: test.name, cycle: index + 1, time: Date.now() - time})
+                }
+              })(done)
             })
           })
 
@@ -113,7 +120,8 @@
         else {
           ms = (test.endTime - test.startTime) / test.cycles
           test.ops = 1000 / ms
-          test.message = test.cycles + ' cycles, ' + ms + ' ms/cycle, ' + test.ops.toFixed(3) + ' ops'
+          test.message =
+            test.cycles + ' cycles, ' + ms + ' ms/cycle, ' + test.ops.toFixed(3) + ' ops'
         }
       })
       // 对结果进行排序对比
