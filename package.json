@@ -4,11 +4,14 @@
   "author": [
     "Yan Qing <admin@zensh.com>"
   ],
-  "version": "1.1.1",
+  "version": "1.2.0",
   "main": "index.js",
   "repository": {
     "type": "git",
     "url": "git@github.com:zensh/jsbench.git"
+  },
+  "engines": {
+    "node": ">= 4"
   },
   "homepage": "https://github.com/zensh/jsbench",
   "keywords": [
@@ -18,16 +21,16 @@
     "jsbench"
   ],
   "dependencies": {
-    "thunks": ">=4.8.0"
+    "thunks": ">=4.9.0"
   },
   "devDependencies": {
-    "thenjs": "^2.0.5",
-    "async": "^2.4.1",
+    "thenjs": "^2.0.6",
+    "async": "^2.5.0",
     "bluebird": "^3.5.0",
     "co": "^4.6.0",
-    "rsvp": "^3.5.0",
+    "rsvp": "^4.0.1",
     "when": "^3.7.8",
-    "standard": "^10.0.2"
+    "standard": "^10.0.3"
   },
   "scripts": {
     "test": "standard && node bench/index"

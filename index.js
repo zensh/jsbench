@@ -1,41 +1,25 @@
 // **Github:** https://github.com/zensh/jsbench
 // **License:** MIT
 
-/* global module, define, console */
-;(function (root, factory) {
-  'use strict'
+'use strict'
 
-  if (typeof module === 'object' && module.exports) module.exports = factory(require('thunks'))
-  else if (typeof define === 'function' && define.amd) define(['thunks'], factory)
-  else root.JSBench = factory(root.thunks)
-}(typeof window === 'object' ? window : this, function (thunks) {
-  'use strict'
+const thunk = require('thunks').thunk
+const isThunkableFn = require('thunks').isThunkableFn
 
-  var thunk = thunks()
-
-  function forEach (array, iterator) {
-    for (var i = 0, len = array >= 0 ? array : array.length; i < len; i++) iterator(array[i], i)
-  }
-
-  function toThunkableFn (fn) {
-    if (typeof fn !== 'function') throw new TypeError('test must be function!')
-    if (thunks.isThunkableFn(fn)) return fn
-    return function (done) { thunk(fn())(done) }
-  }
-
-  function JSBench () {
+class JSBench {
+  constructor () {
     this._list = []
     this._events = {}
   }
 
-  JSBench.prototype.on = function (type, listener) {
+  on (type, listener) {
     this._events[type] = this._events[type] || []
     this._events[type].push(listener)
     return this
   }
 
-  JSBench.prototype.trigger = function (type, value) {
-    var events = this._events[type]
+  trigger (type, value) {
+    let events = this._events[type]
     if (!events) return this
     forEach(events, function (listener) {
       listener(value)
@@ -43,14 +27,14 @@
     return this
   }
 
-  JSBench.prototype.add = function (name, test) {
+  add (name, test) {
     this._list.push({name: name, test: toThunkableFn(test)})
     return this
   }
 
-  JSBench.prototype.run = function (cycles) {
-    var ctx = this
-    var list = ctx._list
+  run (cycles) {
+    const ctx = this
+    const list = ctx._list
 
     cycles = cycles >= 1 ? Math.floor(cycles) : 10
     if (!ctx._events.error) { // 如果未定义，则使用默认的 error 监听
@@ -58,6 +42,7 @@
         console.error(e.name + ' error: ' + e.error)
       })
     }
+
     if (!ctx._events.complete) { // 如果未定义，则使用默认的 complete 监听
       ctx.on('complete', function (e) {
         console.log('\nJSBench Results:')
@@ -143,6 +128,16 @@
       return ranking
     })
   }
+}
 
-  return JSBench
-}))
+function forEach (array, iterator) {
+  for (let i = 0, len = array >= 0 ? array : array.length; i < len; i++) iterator(array[i], i)
+}
+
+function toThunkableFn (fn) {
+  if (typeof fn !== 'function') throw new TypeError('test must be function!')
+  if (isThunkableFn(fn)) return fn
+  return function (done) { thunk(fn())(done) }
+}
+
+module.exports = JSBench
